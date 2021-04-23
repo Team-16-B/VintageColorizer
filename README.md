@@ -3,12 +3,12 @@
 
 ----------------------------
 
-Image (artistic) [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/githubURL/master/ImageColorizerColab.ipynb) |
-Video [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/githubURL/master/VideoColorizerColab.ipynb)
+Image (artistic) [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/Team-16-B/VintageColorizer/blob/master/ImageColorizerColab.ipynb) |
+Video [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/Team-16-B/VintageColorizer/blob//master/VideoColorizerColab.ipynb)
 
 **NEW** Having trouble with the default image colorizer, aka "artistic"?  Try the "stable" one below.  It generally won't produce colors that are as interesting as "artistic", but the glitches are noticeably reduced.  
 
-Image (stable) [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/githubURL/master/ImageColorizerColabStable.ipynb)
+Image (stable) [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/Team-16-B/VintageColorizer/blob//master/ImageColorizerColabStable.ipynb)
 
 
 
@@ -33,7 +33,6 @@ Other ways to stabilize video add up as well. First, generally speaking renderin
 
 Additionally, gaussian noise augmentation during training appears to help but at this point the conclusions as to just how much are bit more tenuous (I just haven't formally measured this yet).  This is loosely based on work done in style transfer video, described here:  https://medium.com/element-ai-research-lab/stabilizing-neural-style-transfer-for-video-62675e203e42.  
 
-Special thanks go to Rani Horev for his contributions in implementing this noise augmentation.
 
 ### What is NoGAN?
 
@@ -119,12 +118,11 @@ Oh and I swear I'll document the code properly...eventually.  Admittedly I'm *on
 
 The easiest way to get started is to go straight to the Colab notebooks: 
 
-Image [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/githubURL/master/ImageColorizerColab.ipynb)
-| Video [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/githubURL/master/VideoColorizerColab.ipynb) 
+Image [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/Team-16-B/VintageColorizer/blob//master/ImageColorizerColab.ipynb)
+| Video [<img src="https://colab.research.google.com/assets/colab-badge.svg" align="center">](https://colab.research.google.com/github/Team-16-B/VintageColorizer/blob//master/VideoColorizerColab.ipynb) 
 
-Special thanks to Matt Robinson and María Benavente for their image Colab notebook contributions, and Robert Bell for the video Colab notebook work!
 
-### Your Own Machine (not as easy)
+### Your Own Machine
 
 
 #### Hardware and Operating System Requirements
@@ -140,7 +138,7 @@ You should now be able to do a simple install with Anaconda. Here are the steps:
 Open the command line and navigate to the root folder you wish to install.  Then type the following commands 
 
 ```console
-git clone https://github.com/githubUrl Vintage_Colorizer
+git clone https://github.com/Team-16-B/VintageColorizer Vintage_Colorizer
 cd Vintage_Colorizer
 conda env create -f environment.yml
 ```

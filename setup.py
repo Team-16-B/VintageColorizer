@@ -19,7 +19,7 @@ setup(
     name="VintageColorizer",
     version="0.0.1",
     packages=find_packages(exclude=["tests"]),
-    url="https://github.com/githubUrl",
+    url="https://github.com/Team-16-B/VintageColorizer/",
     license="MIT License",
     description=get_description(),
     # long_description=get_long_description(),
