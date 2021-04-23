@@ -1,4 +1,4 @@
-name: vintagecolorizer
+name: vintageColorizer
 channels:
 - fastai
 - pytorch

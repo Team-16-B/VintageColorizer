@@ -148,13 +148,13 @@ conda env create -f environment.yml
 Then start running with these commands:
 
 ```console
-source activate vintagecolorizer
+source activate vintageColorizer
 jupyter lab
 ```
 
 From there you can start running the notebooks in Jupyter Lab, via the url they provide you in the console.  
 
-> **Note:** You can also now do "conda activate vintagecolorizer" if you have the latest version of conda and in fact that's now recommended. But a lot of people don't have that yet so I'm not going to make it the default instruction here yet.
+> **Note:** You can also now do "conda activate vintageColorizer" if you have the latest version of conda and in fact that's now recommended. But a lot of people don't have that yet so I'm not going to make it the default instruction here yet.
 
 #### Note on test_images Folder
 
@@ -277,16 +277,16 @@ curl -X POST "http://MY_SUPER_API_IP:5000/process" -H "accept: application/octet
 The API is made to download the model (if not already present locally) at boot time.
 
 Adding the your model to the local subdirectory of the project "data/models" for instance :
-- "/home/ubutun/vintagecolorizer/data/models/ColorizeArtistic_gen.pth" (image model)
-- "/home/ubutun/vintagecolorizer/data/models/ColorizeVideo_gen.pth" (video model)
+- "/home/ubutun/vintageColorizer/data/models/ColorizeArtistic_gen.pth" (image model)
+- "/home/ubutun/vintageColorizer/data/models/ColorizeVideo_gen.pth" (video model)
 
 both models are available here:
-- [Image Model](https://data.deepai.org/vintagecolorizer/ColorizeArtistic_gen.pth)
-- [Video Model](https://data.deepai.org/vintagecolorizer/ColorizeVideo_gen.pth)
+- [Image Model](https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth)
+- [Video Model](https://data.deepai.org/deoldify/ColorizeVideo_gen.pth)
 
 for ubuntu you could do :
 ```bash
-$ wget -O /home/ubutun/vintagecolorizer/data/models/ColorizeArtistic_gen.pth https://data.deepai.org/vintagecolorizer/ColorizeArtistic_gen.pth
+$ wget -O /home/ubutun/vintageColorizer/data/models/ColorizeArtistic_gen.pth https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth
 $ ## Then build the image
 $ docker build -t api -f Dockerfile-api .
 ```
@@ -309,9 +309,9 @@ The colorization inference notebooks should be able to guide you from here. The 
 
 ### Completed Generator Weights
 
-- [Artistic](https://data.deepai.org/vintagecolorizer/ColorizeArtistic_gen.pth)
+- [Artistic](https://data.deepai.org/vintageColorizer/ColorizeArtistic_gen.pth)
 - [Stable](https://www.dropbox.com/s/usf7uifrctqw9rl/ColorizeStable_gen.pth?dl=0)
-- [Video](https://data.deepai.org/vintagecolorizer/ColorizeVideo_gen.pth)
+- [Video](https://data.deepai.org/vintageColorizer/ColorizeVideo_gen.pth)
 
 ### Completed Critic Weights
 
