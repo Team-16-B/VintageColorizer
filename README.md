@@ -175,17 +175,9 @@ We have build for you a quickstart script for you in order to get up to speed in
 ./quick_start.sh
 missing first argument
 
-	  _____        ____  _     _ _  __
-	 |  __ \      / __ \| |   | (_)/ _|
-	 | |  | | ___| |  | | | __| |_| |_ _   _
-	 | |  | |/ _ \ |  | | |/ _` | |  _| | | |
-	 | |__| |  __/ |__| | | (_| | | | | |_| |
-	 |_____/ \___|\____/|_|\__,_|_|_|  \__, |
-	                                    __/ |
-	                                   |___/
-
 
 usage : ./quick_start.sh notebook password -- to start the notebook with password
+
              leave empty for no password (not recommended)
 usage : ./quick_start.sh image_api  -- to start image api
 usage : ./quick_start.sh video_api  -- to start video api
