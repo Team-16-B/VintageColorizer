@@ -21,15 +21,12 @@ NoGAN training is crucial to getting the kind of stable and colorful images seen
 
 In addition to improved video stability, there is an interesting thing going on here worth mentioning. It turns out the models I run, even different ones and with different training structures, keep arriving at more or less the same solution.  That's even the case for the colorization of things you may think would be arbitrary and unknowable, like the color of clothing, cars, and even special effects (as seen in "Metropolis").  
 
-![Metropolis Special FX](https://thumbs.gfycat.com/HeavyLoneBlowfish-size_restricted.gif)
 
 My best guess is that the models are learning some interesting rules about how to colorize based on subtle cues present in the black and white images that I certainly wouldn't expect to exist.  This result leads to nicely deterministic and consistent results, and that means you don't have track model colorization decisions because they're not arbitrary.  Additionally, they seem remarkably robust so that even in moving scenes the renders are very consistent.
 
-![Moving Scene Example](https://thumbs.gfycat.com/FamiliarJubilantAsp-size_restricted.gif)
 
 Other ways to stabilize video add up as well. First, generally speaking rendering at a higher resolution (higher render_factor) will increase stability of colorization decisions.  This stands to reason because the model has higher fidelity image information to work with and will have a greater chance of making the "right" decision consistently.  Closely related to this is the use of resnet101 instead of resnet34 as the backbone of the generator- objects are detected more consistently and correctly with this. This is especially important for getting good, consistent skin rendering.  It can be particularly visually jarring if you wind up with "zombie hands", for example.
 
-![Zombie Hand Example](https://thumbs.gfycat.com/ThriftyInferiorIsabellinewheatear-size_restricted.gif)
 
 Additionally, gaussian noise augmentation during training appears to help but at this point the conclusions as to just how much are bit more tenuous (I just haven't formally measured this yet).  This is loosely based on work done in style transfer video, described here:  https://medium.com/element-ai-research-lab/stabilizing-neural-style-transfer-for-video-62675e203e42.  
 
@@ -38,13 +35,9 @@ Additionally, gaussian noise augmentation during training appears to help but at
 
 This is a new type of GAN training that I've developed to solve some key problems in the previous Vintage Colorizer model. It provides the benefits of GAN training while spending minimal time doing direct GAN training.  Instead, most of the training time is spent pretraining the generator and critic separately with more straight-forward, fast and reliable conventional methods.  A key insight here is that those more "conventional" methods generally get you most of the results you need, and that GANs can be used to close the gap on realism. During the very short amount of actual GAN training the generator not only gets the full realistic colorization capabilities that used to take days of progressively resized GAN training, but it also doesn't accrue nearly as much of the artifacts and other ugly baggage of GANs. In fact, you can pretty much eliminate glitches and artifacts almost entirely depending on your approach. As far as I know this is a new technique. And it's incredibly effective. 
 
-**Original Vintage Colorizer Model**
 
-![Before Flicker](https://thumbs.gfycat.com/CoordinatedVeneratedHogget-size_restricted.gif)
 
-**NoGAN-Based Vintage Colorizer Model**
 
-![After Flicker](https://thumbs.gfycat.com/OilyBlackArctichare-size_restricted.gif)
 
 The steps are as follows: First train the generator in a conventional way by itself with just the feature loss. Next, generate images from that, and train the critic on distinguishing between those outputs and real images as a basic binary classifier. Finally, train the generator and critic together in a GAN setting (starting right at the target size of 192px in this case).  Now for the weird part:  All the useful GAN training here only takes place within a very small window of time.  There's an inflection point where it appears the critic has transferred everything it can that is useful to the generator. Past this point, image quality oscillates between the best that you can get at the inflection point, or bad in a predictable way (orangish skin, overly red lips, etc).  There appears to be no productive training after the inflection point.  And this point lies within training on just 1% to 3% of the Imagenet Data!  That amounts to about 30-60 minutes of training at 192px.  
 
@@ -104,17 +97,6 @@ That's certainly the case here.
 The beauty of this model is that it should be generally useful for all sorts of image modification, and it should do it quite well.
 What you're seeing above are the results of the colorization model, but that's just one component in a pipeline that I'm developing with the exact same approach.
 
-## This Project, Going Forward
-
-So that's the gist of this project – I'm looking to make old photos and film look reeeeaaally good with GANs, and more importantly, make the project *useful*.
-In the meantime though this is going to be my baby and I'll be actively updating and improving the code over the foreseeable future.
-I'll try to make this as user-friendly as possible, but I'm sure there's going to be hiccups along the way.
-
-Oh and I swear I'll document the code properly...eventually.  Admittedly I'm *one of those* people who believes in "self documenting code" (LOL).
-
-## Getting Started Yourself
-
-### Easiest Approach
 
 The easiest way to get started is to go straight to the Colab notebooks: 
 
@@ -154,141 +136,6 @@ From there you can start running the notebooks in Jupyter Lab, via the url they 
 
 > **Note:** You can also now do "conda activate vintageColorizer" if you have the latest version of conda and in fact that's now recommended. But a lot of people don't have that yet so I'm not going to make it the default instruction here yet.
 
-#### Note on test_images Folder
-
-The images in the `test_images` folder have been removed because they were using Git LFS and that costs a lot of money when GitHub actually charges for bandwidth on a popular open source project (they had a billing bug for while that was recently fixed).  The notebooks that use them (the image test ones) still point to images in that directory that I (Jason) have personally and I'd like to keep it that way because, after all, I'm by far the primary and most active developer.  But they won't work for you.  Still, those notebooks are a convenient template for making your own tests if you're so inclined.
-
-#### Typical training
-
-The notebook `ColorizeTrainingWandb` has been created to log and monitor results through [Weights & Biases](https://www.wandb.com/). You can find a description of typical training by consulting [W&B Report](https://app.wandb.ai/borisd13/Vintage Colorizer/reports?view=borisd13%2FDeOldify).
-
-
-## Docker
-
-## Quickstart
-We have build for you a quickstart script for you in order to get up to speed in a minute. It's even compatible if you don't have GPU and will automatically adjust it's configuration according to your hardware (running on CPU will be slow with no surprise).
-
-### Quickstart usage
-```console
-./quick_start.sh
-missing first argument
-
-
-usage : ./quick_start.sh notebook password -- to start the notebook with password
-
-             leave empty for no password (not recommended)
-usage : ./quick_start.sh image_api  -- to start image api
-usage : ./quick_start.sh video_api  -- to start video api
-```
-
-### Quickstart jupyter notebook
-Cloning
-```console
-git clone https://github.com/gitUrl Vintage_Colorizer
-```
-
-Starting the notebook
-```console
-cd Vintage Colorizer && ./quick_start.sh notebook my_super_password
-```
-
-your notebook will be accessible on port 8888
-
-### Quickstart APIs
-Cloning
-```console
-git clone https://github.com/gitUrl Vintage_Colorizer
-```
-
-Starting the image api
-```console
-cd Vintage_Colorizer && ./quick_start.sh image_api
-```
-
-Starting the video api
-```console
-cd Vintage_Colorizer && ./quick_start.sh image_api
-```
-your API will be accessible on port 5000
-
-### Docker for Jupyter
-
-You can build and run the docker using the following process:
-
-Cloning
-```console
-git clone https://github.com/gitUrl Vintage_Colorizer
-```
-
-Building Docker
-```console
-cd Vintage_Colorizer && docker build -t deoldify_jupyter -f Dockerfile .
-```
-
-Running Docker
-```console
-echo "http://$(curl ifconfig.io):8888" && nvidia-docker run --ipc=host --env NOTEBOOK_PASSWORD="pass123" -p 8888:8888 -it deoldify_jupyter
-```
-
-### Docker for API
-
-You can build and run the docker using the following process:
-
-Cloning
-```console
-git clone https://github.com/gitUrl Vintage_Colorizer
-```
-
-Building Docker
-```console
-cd Vintage_Colorizer && docker build -t deoldify_api -f Dockerfile-api .
-```
-> **Note:** The above command produces a docker image configured for image processing.  To build a docker image for video processing, edit the Dockerfile-api file, replacing `CMD ["app.py"]` with `CMD ["app-video.py"]`
-
-Running Docker
-```console
-echo "http://$(curl ifconfig.io):5000" && nvidia-docker run --ipc=host -p 5000:5000 -d deoldify_api
-```
-
-Calling the API for image processing for a remote image
-```console
-curl -X POST "http://MY_SUPER_API_IP:5000/process" -H "accept: image/png" -H "Content-Type: application/json" -d "{\"url\":\"http://www.afrikanheritage.com/wp-content/uploads/2015/08/slave-family-P.jpeg\", \"render_factor\":35}" --output colorized_image.png
-```
-
-Calling the API for image processing for a local image
-```console
-curl -X POST "http://MY_SUPER_API_IP:5000/process" -H "accept: image/png" -H "Content-Type: image/jpeg" -F "file=@slave-family-P.jpeg" -F "render_factor=35" --output colorized_image.png
-```
-
-Calling the API for video processing for a remote video
-```console
-curl -X POST "http://MY_SUPER_API_IP:5000/process" -H "accept: application/octet-stream" -H "Content-Type: application/json" -d "{\"url\":\"https://v.redd.it/d1ku57kvuf421/HLSPlaylist.m3u8\", \"render_factor\":35}" --output colorized_video.mp4
-```
-
-Calling the API for video processing for a local video
-```console
-curl -X POST "http://MY_SUPER_API_IP:5000/process" -H "accept: application/octet-stream" -H "Content-Type: video/mpeg" -F "file=@chaplin.mp4"  -F "render_factor=35" --output colorized_video.mp4
-```
-> **Note:** If you don't have Nvidia Docker, [here](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)#installing-version-20) is the installation guide.
-
-### Caching the model to improve API booting time
-The API is made to download the model (if not already present locally) at boot time.
-
-Adding the your model to the local subdirectory of the project "data/models" for instance :
-- "/home/ubutun/vintageColorizer/data/models/ColorizeArtistic_gen.pth" (image model)
-- "/home/ubutun/vintageColorizer/data/models/ColorizeVideo_gen.pth" (video model)
-
-both models are available here:
-- [Image Model](https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth)
-- [Video Model](https://data.deepai.org/deoldify/ColorizeVideo_gen.pth)
-
-for ubuntu you could do :
-```bash
-$ wget -O /home/ubutun/vintageColorizer/data/models/ColorizeArtistic_gen.pth https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth
-$ ## Then build the image
-$ docker build -t api -f Dockerfile-api .
-```
-
 ### Installation Details
 
 This project is built around the wonderful Fast.AI library.  Prereqs, in summary:
@@ -297,65 +144,3 @@ This project is built around the wonderful Fast.AI library.  Prereqs, in summary
 - **PyTorch 1.0.1** Not the latest version of PyTorch- that will not play nicely with the version of FastAI above.  Note however that the conda install of FastAI 1.0.51 grabs the latest PyTorch, which doesn't work.  This is patched over by our own conda install but fyi.
 - **Jupyter Lab** `conda install -c conda-forge jupyterlab`
 - **Tensorboard** (i.e. install Tensorflow) and **TensorboardX** (https://github.com/lanpa/tensorboardX).  I guess you don't *have* to but man, life is so much better with it.  FastAI now comes with built in support for this- you just  need to install the prereqs: `conda install -c anaconda tensorflow-gpu` and `pip install tensorboardX`
-- **ImageNet** – Only if you're training, of course. It has proven to be a great dataset for my purposes.  http://www.image-net.org/download-images
-
-## Pretrained Weights
-
-To start right away on your own machine with your own images or videos without training the models yourself, you'll need to download the "Completed Generator Weights" listed below and drop them in the /models/ folder.
-
-The colorization inference notebooks should be able to guide you from here. The notebooks to use are named ImageColorizerArtistic.ipynb, ImageColorizerStable.ipynb, and VideoColorizer.ipynb.
-
-### Completed Generator Weights
-
-- [Artistic](https://data.deepai.org/vintageColorizer/ColorizeArtistic_gen.pth)
-- [Stable](https://www.dropbox.com/s/usf7uifrctqw9rl/ColorizeStable_gen.pth?dl=0)
-- [Video](https://data.deepai.org/vintageColorizer/ColorizeVideo_gen.pth)
-
-### Completed Critic Weights
-
-- [Artistic](https://www.dropbox.com/s/1qd663zbk6ntzuy/ColorizeArtistic_crit.pth?dl=0)
-- [Stable](https://www.dropbox.com/s/wlqu6w88qwzcvfn/ColorizeStable_crit.pth?dl=0)
-- [Video](https://www.dropbox.com/s/oyl6qmwpdvpm95d/ColorizeVideo_crit.pth?dl=0)
-
-### Pretrain Only Generator Weights
-
-- [Artistic](https://www.dropbox.com/s/lbuv6911aivm9zi/ColorizeArtistic_PretrainOnly_gen.pth?dl=0)
-- [Stable](https://www.dropbox.com/s/6ita1pwyqjsmx4p/ColorizeStable_PretrainOnly_gen.pth?dl=0)
-- [Video](https://www.dropbox.com/s/tl4uzkwwapz68ca/ColorizeVideo_PretrainOnly_gen.pth?dl=0)
-
-### Pretrain Only Critic Weights
-
-- [Artistic](https://www.dropbox.com/s/6td494kcjqfmh26/ColorizeArtistic_PretrainOnly_crit.pth?dl=0)
-- [Stable](https://www.dropbox.com/s/houkmrdivbia7z8/ColorizeStable_PretrainOnly_crit.pth?dl=0)
-- [Video](https://www.dropbox.com/s/80wpz16x7yudblh/ColorizeVideo_PretrainOnly_crit.pth?dl=0)
-
-## Want the Old Vintage Colorizer?
-
-We suspect some of you are going to want access to the original Vintage Colorizer model for various reasons.  We have that archived here:  https://github.com/dana-kelley/Vintage Colorizer
-
-## Want More?
-
-Follow [#Vintage Colorizer](https://twitter.com/search?q=%23Deoldify) on Twitter.
-
-## License
-
-All code in this repository is under the MIT license as specified by the LICENSE file.
-
-The model weights listed in this readme under the "Pretrained Weights" section are trained by ourselves and are released under the MIT license.
-
-## A Statement on Open Source Support
-
-We believe that open source has done a lot of good for the world.  After all, Vintage Colorizer simply wouldn't exist without it. But we also believe that there needs to be boundaries on just how much is reasonable to be expected from an open source project maintained by just two developers.
-
-Our stance is that we're providing the code and documentation on research that we believe is beneficial to the world.  What we have provided are novel takes on colorization, GANs, and video that are hopefully somewhat friendly for developers and researchers to learn from and adopt. This is the culmination of well over a year of continuous work, free for you. What wasn't free was shouldered by us, the developers.  We left our jobs, bought expensive GPUs, and had huge electric bills as a result of dedicating ourselves to this.
-
-What we haven't provided here is a ready to use free "product" or "app", and we don't ever intend on providing that.  It's going to remain a Linux based project without Windows support, coded in Python, and requiring people to have some extra technical background to be comfortable using it.  Others have stepped in with their own apps made with Vintage Colorizer, some paid and some free, which is what we want! We're instead focusing on what we believe we can do best- making better commercial models that people will pay for.  
-Does that mean you're not getting the very best for free?  Of course. We simply don't believe that we're obligated to provide that, nor is it feasible! We compete on research and sell that.  Not a GUI or web service that wraps said research- that part isn't something we're going to be great at anyways. We're not about to shoot ourselves in the foot by giving away our actual competitive advantage for free, quite frankly.
-
-We're also not willing to go down the rabbit hole of providing endless, open ended and personalized support on this open source project.  Our position is this:  If you have the proper background and resources, the project provides more than enough to get you started. We know this because we've seen plenty of people using it and making money off of their own projects with it.  
-
-Thus, if you have an issue come up and it happens to be an actual bug that having it be fixed will benefit users generally, then great- that's something we'll be happy to look into. 
-
-In contrast, if you're asking about something that really amounts to asking for personalized and time consuming support that won't benefit anybody else, we're not going to help. It's simply not in our interest to do that. We have bills to pay, after all. And if you're asking for help on something that can already be derived from the documentation or code?  That's simply annoying, and we're not going to pretend to be ok with that.
-
-# VintageColorizer
