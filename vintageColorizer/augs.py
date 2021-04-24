@@ -2,7 +2,6 @@ import random
 
 from fastai.vision.image import TfmPixel
 
-# Contributed by Rani Horev. Thank you!
 def _noisify(
     x, pct_pixels_min: float = 0.001, pct_pixels_max: float = 0.4, noise_range: int = 30
 ):
